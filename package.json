@@ -1,0 +1,16 @@
+{
+  "name": "kriptografija",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start-front": "cd frontend && npm run dev",
+    "start-back": "cd api && dotnet watch",
+    "start": "concurrently \"npm run start-front\" \"npm run start-back\""
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^8.0.1"
+  }
+}

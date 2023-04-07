@@ -45,6 +45,24 @@
   }
 }
 
+const handleKeySave = () => {
+  const element = document.createElement("a");
+  const file = new Blob([key], { type: "text/plain" });
+  element.href = URL.createObjectURL(file);
+  element.download = "key.txt";
+  document.body.appendChild(element); // Required for this to work in FireFox
+  element.click();
+};
+
+const handleIvSave = () => {
+  const element = document.createElement("a");
+  const file = new Blob([iv], { type: "text/plain" });
+  element.href = URL.createObjectURL(file);
+  element.download = "iv.txt";
+  document.body.appendChild(element); // Required for this to work in FireFox
+  element.click();
+};
+
 </script>
 
 <form on:submit|preventDefault={handleSubmit}>
@@ -66,7 +84,11 @@
   {#if key}
   <div class="form-input">
     <label for="key">Ključ</label>
-    <input type="text" bind:value={key} name="key" readonly />
+    <br />
+    <span>{key}</span>
+    <button type="button" on:click={handleKeySave} class="saveBtn">
+      Shrani
+    </button>
   </div>
   {/if}
   <br />
@@ -74,7 +96,10 @@
   <div class="form-input">
     <label for="iv">IV</label>
     <br />
-    <input type="text" bind:value={iv} name="iv" readonly />
+    <span>{iv}</span>
+    <button type="button" on:click={handleIvSave} class="saveBtn">
+      Shrani
+    </button>
   </div>
   {/if}
   <br />
@@ -89,5 +114,8 @@
   }
   .form-input {
     margin-bottom: 15px;
+  }
+  .saveBtn {
+    margin-left: 10px;
   }
 </style>
