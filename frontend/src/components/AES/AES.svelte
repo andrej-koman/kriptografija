@@ -10,11 +10,11 @@
     }
 </script>
 
-<button on:click={handleBackClick}>Nazaj</button>
 <div class="aes">
     <AesCipher />
     <AesDecipher />
 </div>
+<button on:click={handleBackClick}>Nazaj</button>
 
 <style>
     .aes {

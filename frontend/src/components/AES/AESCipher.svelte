@@ -116,6 +116,7 @@
     border: 1px solid black;
     border-radius: 10px;
     height: 100%;
+    background-color: rgba(0, 0, 0, 0.05);
   }
   form > h2 {
     margin-top: 0px;
