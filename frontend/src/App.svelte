@@ -3,6 +3,10 @@
   import Rsa from "./components/RSA/RSA.svelte";
 
   let currentComponent = null;
+
+  const handleBack = () => {
+    currentComponent = null;
+  }
 </script>
 
 {#if currentComponent === null}
@@ -14,7 +18,7 @@
   </div>
 </main>
 {:else if currentComponent === Aes}
-  <Aes />
+  <Aes on:back={handleBack} />
 {:else if currentComponent === Rsa}
   <Rsa />
 {/if}
