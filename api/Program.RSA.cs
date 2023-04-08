@@ -14,6 +14,9 @@ namespace API
                 IFormFile? publicKey = context.Request.Form.Files["publicKey"];
                 string publicKeyString;
 
+                // Get the key size from the form data
+                string? keySizeString = context.Request.Form["keySize"];
+
                 // Save the public key to a string
                 using (StreamReader reader = new StreamReader(publicKey.OpenReadStream()))
                 {
@@ -72,14 +75,15 @@ namespace API
                 }
 
                 // Encrypt AES key and IV with RSA
-                byte[] encryptedAesKey = rsa.Encrypt(aesKey, RSAEncryptionPadding.OaepSHA256);
+                rsa.KeySize = int.Parse(keySizeString);
+                byte[] encryptedAesKey = rsa.Encrypt(aesKey, RSAEncryptionPadding.Pkcs1);
 
                 // Return the encrypted file, public key, and private key
                 context.Response.ContentType = "application/octet-stream";
                 context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
                 context.Response.Headers.Add("Access-Control-Expose-Headers", "EncryptedKey, Iv");
-                context.Response.Headers.Add("EncryptedKey", Convert.ToBase64String(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(encryptedAesKey))));
-                context.Response.Headers.Add("Iv", Convert.ToBase64String(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(aesIV))));
+                context.Response.Headers.Add("EncryptedKey", Convert.ToBase64String(encryptedAesKey));
+                context.Response.Headers.Add("Iv", Convert.ToBase64String(aesIV));
                 using (FileStream fs = new FileStream(outputPath, FileMode.Open))
                 {
                     await fs.CopyToAsync(context.Response.Body);
@@ -100,9 +104,9 @@ namespace API
                     return;
                 }
 
-                string? encryptedKey = context.Request.Headers["EncryptedKey"];
+                string? encryptedKey = context.Request.Form["encryptedKey"];
                 string? privateKey = context.Request.Form["privateKey"];
-                string? iv = context.Request.Headers["Iv"];
+                string? iv = context.Request.Form["iv"];
 
                 // Save the public key and private key to strings
                 if (String.IsNullOrEmpty(encryptedKey) || String.IsNullOrEmpty(privateKey) || String.IsNullOrEmpty(iv))
@@ -126,8 +130,10 @@ namespace API
                     return;
                 }
 
+                byte[] encryptedKeyBytes = Encoding.UTF8.GetBytes(encryptedKey);
+
                 // Decrypt the AES key with RSA
-                byte[] aesKey = rsa.Decrypt(Convert.FromBase64String(encryptedKey), RSAEncryptionPadding.OaepSHA256);
+                byte[] aesKey = rsa.Decrypt(Convert.FromBase64String(encryptedKey), RSAEncryptionPadding.Pkcs1);
 
                 // Turn the IV into a byte array
                 byte[] aesIv = Convert.FromBase64String(iv);

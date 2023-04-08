@@ -17,6 +17,7 @@
     const formData = new FormData();
     formData.append("file", file);
     formData.append("publicKey", publicKey);
+    formData.append("keySize", keyLength.toString());
 
     // Send the request
     try {
