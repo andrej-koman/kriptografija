@@ -20,7 +20,7 @@
 {:else if currentComponent === Aes}
   <Aes on:back={handleBack} />
 {:else if currentComponent === Rsa}
-  <Rsa />
+  <Rsa on:back={handleBack}/>
 {/if}
 
 
