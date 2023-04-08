@@ -8,7 +8,7 @@ namespace API
         {
             app.MapPost("/aes/encrypt", async context =>
             {
-                // Preverimo če je ključ podan
+                // Preverimo če je dolžina ključ podan
                 if (!int.TryParse(context.Request.Query["keyLength"], out int keyLength))
                 {
                     context.Response.StatusCode = 400;
