@@ -5,11 +5,6 @@
   let keyLength: number, file: File;
 
   const handleSubmit = async () => {
-    /* if (!file || !keyLength) {
-      alert("Niste vpisali vseh podatkov!");
-      return;
-    }
- */
     // Generate the key pair
     const { publicKey, privateKey } = generateKeyPair(keyLength, file.name);
 

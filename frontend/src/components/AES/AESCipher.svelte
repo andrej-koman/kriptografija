@@ -15,6 +15,7 @@
       alert("Niste vpisali vseh podatkov!");
       return;
     }
+    
     try {
       const formData = new FormData();
       formData.append("file", file);
